@@ -10,9 +10,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-//- 간단하게 테스트하기 위해서는 @AutoConfigureMockMvc가 아닌 @WebMvcTest를 사용해야 한다.
-//- @WebMvcTest는 @SpringBootTest와 같이 사용될 수 없다. 왜냐하면 각자 서로의 MockMvc를 모킹하기 때문에 충돌이 발생하기 때문이다.
-//- https://elevatingcodingclub.tistory.com/61
+// 간단하게 테스트하기 위해서는 `@WebMvcTest`를 사용하면 된다.
+// `@WebMvcTest`의 경우 JPA기능이 작동하지 않는다. Controller 등 외부 연동과 관련된 부분만 활성화 되니, JPA기능 까지 한번에 테스트할때는 @SpringBootTest와 TestRestTemplate 등을 사용하면 된다.
+// `@WebMvcTest`는 `@SpringBootTest`와 같이 사용될 수 없다. 왜냐하면 각자 서로의 MockMvc를 모킹하기 때문에 충돌이 발생하기 때문이다.
+// https://elevatingcodingclub.tistory.com/61
 @WebMvcTest
 //@SpringBootTest @AutoConfigureMockMvc
 class HelloControllerTest {
