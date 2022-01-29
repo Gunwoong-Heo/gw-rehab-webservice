@@ -1,4 +1,13 @@
 spring:
+#  h2:
+#    console:
+#      enabled: true
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
+      schema: classpath:org/springframework/session/jdbc/schema-h2.sql # Path to the SQL file to use to initialize the database schema.
+      table-name: SPRING_SESSION # Name of the database table used to store sessions.
   profiles:
 #    include: real-oauth
     include: oauth  # application-oauth.properties
