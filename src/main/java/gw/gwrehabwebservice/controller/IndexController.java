@@ -1,5 +1,6 @@
 package gw.gwrehabwebservice.controller;
 
+import gw.gwrehabwebservice.config.auth.LoginUser;
 import gw.gwrehabwebservice.config.auth.dto.SessionUser;
 import gw.gwrehabwebservice.dto.PostsResponseDto;
 import gw.gwrehabwebservice.service.PostsService;
@@ -19,9 +20,9 @@ public class IndexController {
     private final HttpSession httpSession;
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, @LoginUser SessionUser user) {
         model.addAttribute("posts", postsService.findAllDesc());
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+//        SessionUser user = (SessionUser) httpSession.getAttribute("user");
         if (user != null) {
             // [`index.mustache` 에서 이름 출력 안되는 case 中 이런 이슈도 있음]
             // 윈도우 환경변수 이슈?  `userName`이 윈도우에서 환경변수로 사용되는 이름이기 때문에 pc의 `userName`인 "lg"로 표시되었다.
