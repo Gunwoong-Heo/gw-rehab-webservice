@@ -1,8 +1,12 @@
 package gw.gwrehabwebservice.controller;
 
+import gw.gwrehabwebservice.config.auth.SecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.is;
@@ -14,13 +18,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // `@WebMvcTest`의 경우 JPA기능이 작동하지 않는다. Controller 등 외부 연동과 관련된 부분만 활성화 되니, JPA기능 까지 한번에 테스트할때는 @SpringBootTest와 TestRestTemplate 등을 사용하면 된다.
 // `@WebMvcTest`는 `@SpringBootTest`와 같이 사용될 수 없다. 왜냐하면 각자 서로의 MockMvc를 모킹하기 때문에 충돌이 발생하기 때문이다.
 // https://elevatingcodingclub.tistory.com/61
-@WebMvcTest
+@WebMvcTest(controllers = HelloController.class,
+            excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
+            }
+)
 //@SpringBootTest @AutoConfigureMockMvc
 class HelloControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
+    @WithMockUser(roles="USER")
     @Test
     public void hello() throws Exception {
 
@@ -37,6 +46,7 @@ class HelloControllerTest {
         ;
     }
 
+    @WithMockUser(roles="USER")
     @Test
     public void helloDto가_리턴된다() throws Exception {
         // given
