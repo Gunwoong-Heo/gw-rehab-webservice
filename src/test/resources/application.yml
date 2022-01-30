@@ -1,3 +1,11 @@
+#spring:
+#  jpa:
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+#  h2:
+#    console:
+#      enabled: true
 spring:
   # Test OAuth
   security:
@@ -8,9 +16,9 @@ spring:
             client-id: test
             client-secret: test
             scope: profile,email
-  #  h2:
-  #    console:
-  #      enabled: true
+  h2:
+    console:
+      enabled: true
   session:
     store-type: jdbc
     jdbc:
