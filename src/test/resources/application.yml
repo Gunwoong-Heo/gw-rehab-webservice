@@ -2,7 +2,7 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+#        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: true
   h2:
     console:
@@ -18,7 +18,7 @@ spring:
             client-id: test
             client-secret: test
             scope: profile,email
-
+####################################################################################
 #spring:
 #  # Test OAuth
 #  security:
@@ -39,7 +39,7 @@ spring:
 #      schema: classpath:org/springframework/session/jdbc/schema-h2.sql # Path to the SQL file to use to initialize the database schema.
 #      table-name: SPRING_SESSION # Name of the database table used to store sessions.
 #  profiles:
-#    #    include: real-oauth
+##    include: real-oauth
 #    include: oauth  # application-oauth.properties
 #  datasource:
 #    url: jdbc:h2:tcp://localhost/~/gw-rehab-webservice
@@ -52,11 +52,9 @@ spring:
 #      ddl-auto: create
 #    properties:
 #      hibernate:
-#        #        show_sql: true
+##        show_sql: true
 #        format_sql: true
 #        use_sql_comments: true
-#
-#
 #
 #logging.level:
 #  org.hibernate.SQL: debug
