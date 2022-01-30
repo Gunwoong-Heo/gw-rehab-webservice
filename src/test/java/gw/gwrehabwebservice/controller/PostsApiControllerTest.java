@@ -7,6 +7,7 @@ import gw.gwrehabwebservice.dto.PostsUpdateRequestDto;
 import gw.gwrehabwebservice.repository.PostsRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,15 +15,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -30,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional  // 여기서 붙이면 `Posts_등록된다()` 에러남..(원인 찾기) // 테스트코드에 붙었을때만 데이터를 롤백시킨다.(일반적인 경우에는 아님)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-class PostsApiControllerTest {
+public class PostsApiControllerTest {
 
     @LocalServerPort
     private int port;
@@ -44,12 +50,24 @@ class PostsApiControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private WebApplicationContext context;
+
+    @BeforeEach
+    public void setup() {
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
+    }
+
     @AfterEach
     public void tearDown() throws Exception {
         postsRepository.deleteAll();
     }
 
     @Test
+    @WithMockUser(roles = "USER")
     public void Posts_등록된다() throws Exception {
         // given
         String title = "title";
@@ -63,8 +81,10 @@ class PostsApiControllerTest {
         String url = "http://localhost:" + port + "/api/v1/posts";
 
         // when
-        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, requestDto, Long.class);
 /*
+        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, requestDto, Long.class);
+*/
+        // Security 적용 후 테스트 변경함
         mockMvc.perform(
                         post(url)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -72,11 +92,12 @@ class PostsApiControllerTest {
                 )
                 .andExpect(status().isOk())
         ;
-*/
 
         // then
+/*
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isGreaterThan(0L);
+*/
 
         List<Posts> postsList = postsRepository.findAll();
         assertThat(postsList.get(0).getTitle()).isEqualTo(title);
@@ -84,6 +105,7 @@ class PostsApiControllerTest {
     }
     
     @Test
+    @WithMockUser(roles = "USER")
     public void Posts_수정된다() throws Exception {
         // given
         Posts posts = Posts.builder()
@@ -105,24 +127,25 @@ class PostsApiControllerTest {
         HttpEntity<PostsUpdateRequestDto> requestEntity = new HttpEntity<>(requestDto);
 
         // when
-        ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Long.class);
-
 /*
+        ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Long.class);
+*/
+
+        // Security 적용 후 테스트 변경함
         mockMvc.perform(put(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(requestDto)))
                 .andExpect(status().isOk());
-*/
 
         // then
+/*
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isGreaterThan(0L);
+*/
 
-/*
         List<Posts> postsList = postsRepository.findAll();
         assertThat(postsList.get(0).getTitle()).isEqualTo(expectedTitle);
         assertThat(postsList.get(0).getContent()).isEqualTo(expectedContent);
-*/
 
     }
 
