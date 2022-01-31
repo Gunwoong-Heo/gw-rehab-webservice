@@ -8,25 +8,39 @@ spring:
             client-id: test
             client-secret: test
             scope: profile,email
+
+  h2:
+    console:
+      enabled: true
+
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
+#      schema: classpath:org/springframework/session/jdbc/schema-h2.sql # Path to the SQL file to use to initialize the database schema.
+      schema: classpath:org/springframework/session/jdbc/schema-mysql.sql # Path to the SQL file to use to initialize the database schema.
+      table-name: SPRING_SESSION # Name of the database table used to store sessions.
+
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/gw-rehab-webservice;MODE=MYSQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
   jpa:
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
+#        dialect : org.hibernate.dialect.SQLServerDialect
+#        dialect: org.hibernate.dialect.Oracle10gDialect
+#        https://jojoldu.tistory.com/539
 #        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        dialect: org.hibernate.dialect.MySQL57Dialect
+        storage_engine: innodb
 #        show_sql: true
         format_sql: true
         use_sql_comments: true
-
-  h2:
-    console:
-      enabled: true
-  session:
-    store-type: jdbc
-    jdbc:
-      initialize-schema: always
-      schema: classpath:org/springframework/session/jdbc/schema-h2.sql # Path to the SQL file to use to initialize the database schema.
-      table-name: SPRING_SESSION # Name of the database table used to store sessions.
 
 logging.level:
   org.hibernate.SQL: debug
