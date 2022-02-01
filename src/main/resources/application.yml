@@ -1,5 +1,6 @@
 spring:
   profiles:
+    active: local
 #    include: real-oauth
     include: oauth  # application-oauth.properties
 
