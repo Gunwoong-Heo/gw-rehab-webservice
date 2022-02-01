@@ -22,10 +22,12 @@ spring:
       table-name: SPRING_SESSION # Name of the database table used to store sessions.
 
   datasource:
-    url: jdbc:h2:tcp://localhost/~/gw-rehab-webservice;MODE=MYSQL
-    username: sa
-    password:
     driver-class-name: org.h2.Driver
+    hikari:
+#      jdbc-url: jdbc:h2:tcp://localhost/~/gw-rehab-webservice;MODE=MYSQL
+      jdbc-url: jdbc:h2:mem:testdb;MODE=MYSQL
+      username: sa
+      password:
 
   jpa:
     hibernate:
