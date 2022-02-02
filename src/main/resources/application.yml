@@ -3,6 +3,8 @@ spring:
     group:
       local: oauth, local
       real: real, oauth, real-db
+      real1: real1, oauth, real-db
+      real2: real2, oauth, real-db
 
 #spring:
 #  profiles:
