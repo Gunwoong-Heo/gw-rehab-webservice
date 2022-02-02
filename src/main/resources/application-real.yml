@@ -13,3 +13,8 @@ spring:
         storage_engine: innodb
   session:
     store-type: jdbc
+    jdbc:
+      initialize-schema: always
+      #      schema: classpath:org/springframework/session/jdbc/schema-h2.sql # Path to the SQL file to use to initialize the database schema.
+      schema: classpath:org/springframework/session/jdbc/schema-mysql.sql # Path to the SQL file to use to initialize the database schema.
+      table-name: SPRING_SESSION # Name of the database table used to store sessions.
